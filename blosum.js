@@ -40,6 +40,7 @@ class BLOSUM62{
 const blosum = new BLOSUM62();
 
 class Cell{
+    /** @type {number} */
     score;
     isStartHorizontal = false;
     isStartVertical = false;
@@ -85,7 +86,7 @@ class Calculator{
         this.baseArray1 = baseArray1;
         this.baseArray2 = baseArray2;
     }
-    createTable(){
+    createTable(seq=false){
         for(let i=0;i<this.baseArray1.length;i++){
             this.table.push([]);
             for(let j=0;j<this.baseArray2.length;j++){
@@ -95,6 +96,7 @@ class Calculator{
                 this.table[i][j] = new Cell(this.baseArray1[i],this.baseArray2[j],leftCell,leftUpperCell,upperCell);
             }
         }
+        if(seq)this.createPair();
     }
     /**
      * 
@@ -133,10 +135,18 @@ class Calculator{
         this.complete1 = baseArray1;
         this.complete2 = baseArray2;
     }
+    printTable(){
+        let returnText = "";
+        const maxCell = this.searchMaxCell();
+        const maxLen = String(maxCell.score).length;
+        for(const line of this.table){
+            for(const e of line){
+                returnText += String(e.score).padStart(maxLen," ")+" ";
+            }
+            returnText += '\n';
+        }
+        return returnText;
+    }
 }
 
-const test = new Calculator("GCTTACGTAAGT","TACGTA");
-test.createTable();
-test.createPair();
-console.log(test.complete1);
-console.log(test.complete2);
+module.exports.Calculator = Calculator;
