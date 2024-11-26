@@ -12,5 +12,20 @@ npm link
 
 # Usage
 ```sh
-seq [base1] [base2]
+seqp [options] [base1] [base2]
+```
+* help
+```sh
+seqp -h
+Usage: seq [options]
+
+A pairwise alignment tool
+
+Options:
+  -V, --version         output the version number
+  -o, --output <file>   select output file
+  -t, --score-table     output finally scores table
+  -f, --foutput <file>  select input file and force overwrite
+  -i, --input <file>    select input file
+  -h, --help            display help for command
 ```
