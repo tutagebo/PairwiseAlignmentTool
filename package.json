@@ -15,6 +15,6 @@
     "path": "^0.12.7"
   },
   "bin": {
-    "seq": "./main.js"
+    "seqp": "./main.js"
   }
 }
