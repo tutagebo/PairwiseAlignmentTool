@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const { program } = require('commander');
-const { path } = require('path');
+const path = require('path');
 const Calculator = require('./blosum').Calculator;
 const fs = require("fs");
 
@@ -12,7 +12,7 @@ program
 program
     .option('-o, --output <file>', 'select output file')
     .option('-t, --score-table', 'output finally scores table')
-    .option('--foutput <file>', 'select input file and force overwrite')
+    .option('-f, --foutput <file>', 'select input file and force overwrite')
     .option('-i, --input <file>', 'select input file');
 
 program.parse(process.argv);
@@ -24,7 +24,7 @@ program
         let base1, base2;
         if(options["input"]){
             /** @type {string} */
-            const inputFileText = fs.readFileSync(options.input);
+            const inputFileText = String(fs.readFileSync(options.input));
             [ base1, base2 ] = inputFileText.split(/\n/);
         }else{
             base1 = program.args[0];
@@ -32,7 +32,7 @@ program
         }
         const pair = new Calculator(base1,base2);
         pair.createTable(true);
-        const outputText = [pair.complete1, pair.complete2].join("\n");
+        const outputText = [pair.complete1, pair.complete2].join("\n")+"\n";
         console.log("result:");
         console.log(outputText);
         if(options["output"]){
@@ -47,12 +47,16 @@ program
             }
             fs.writeFileSync(options.output, outputText);
         }else if(options["foutput"]){
-            const dir = path.dirname(options.output);
+            const dir = path.dirname(options.foutput);
+            if (!options.foutput) {
+                console.error('Error: File path is not defined');
+                process.exit(1);
+            }
             if (!fs.existsSync(dir)) {
                 console.error(`Error: Directory "${dir}" does not exist.`);
                 process.exit(1);
             }
-            fs.writeFileSync(options.output, outputText);
+            fs.writeFileSync(options.foutput, outputText);
         }
         if(options["scoreTable"]){
             console.log("Score Table:")
